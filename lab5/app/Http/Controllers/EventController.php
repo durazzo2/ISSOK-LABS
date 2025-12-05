@@ -9,12 +9,28 @@ use Illuminate\Http\Request;
 class EventController extends Controller
 {
     // INDEX: листа со пагинација
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('organizer')->paginate(10);
+        $query = Event::with('organizer');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%")
+                    ->orWhereHas('organizer', function ($org) use ($search) {
+                        $org->where('name', 'like', "%{$search}%");
+                    });
+            });
+        }
+
+        $events = $query->paginate(10)->appends($request->only('search'));
 
         return view('events.index', compact('events'));
     }
+
 
     // CREATE: форма (со избор на организатор)
     public function create()

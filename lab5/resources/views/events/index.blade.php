@@ -6,6 +6,23 @@
         <a href="{{ route('events.create') }}" class="btn btn-primary">Нов настан</a>
     </div>
 
+    <form method="GET" action="{{ route('events.index') }}" class="mb-3">
+        <div class="input-group">
+            <input type="text"
+                   name="search"
+                   class="form-control"
+                   placeholder="Пребарај настани..."
+                   value="{{ request('search') }}">
+
+            <button class="btn btn-primary">Пребарај</button>
+
+            @if(request('search'))
+                <a href="{{ route('events.index') }}" class="btn btn-secondary">Ресет</a>
+            @endif
+        </div>
+    </form>
+
+
     @if($events->count())
         <table class="table table-bordered table-striped">
             <thead>
