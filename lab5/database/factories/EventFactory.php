@@ -14,7 +14,7 @@ class EventFactory extends Factory
             'description' => $this->faker->paragraph(3),
             'type' => $this->faker->randomElement(['семинар', 'работилница', 'предавање']),
             'date' => $this->faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
-            'organizer_id' => Organizer::factory(), // ако нема organizer се креира автоматски
+            'organizer_id' => Organizer::factory(),
         ];
     }
 }

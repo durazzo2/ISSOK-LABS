@@ -11,13 +11,6 @@ class OrganizerSeeder extends Seeder
     {
         Organizer::factory()->count(5)->create();
 
-        // Или рачно ако сакаш фиксни вредности:
-        /*
-        Organizer::create([
-            'name' => 'Teodor Duracoski',
-            'email' => 'teodor@example.com',
-            'phone' => '070123456'
-        ]);
-        */
+
     }
 }

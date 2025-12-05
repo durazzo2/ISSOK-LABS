@@ -17,7 +17,6 @@ class Event extends Model
         'organizer_id',
     ];
 
-    // Еден настан припаѓа на еден организатор
     public function organizer()
     {
         return $this->belongsTo(Organizer::class);
