@@ -32,4 +32,10 @@ class EventService
     {
         return $this->events->delete($id);
     }
+
+    public function getById($id)
+    {
+        return $this->events->find($id);
+    }
+
 }

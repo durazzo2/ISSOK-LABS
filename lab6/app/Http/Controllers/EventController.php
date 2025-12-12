@@ -37,8 +37,12 @@ class EventController extends Controller
 
     public function edit($id)
     {
-        $event = $this->events->events->find($id);
+        $event = $this->events->getById($id);
+        $organizers = $this->organizers->getAll();
+
+        return view('events.edit', compact('event', 'organizers'));
     }
+
 
     public function update(Request $request, $id)
     {
@@ -51,4 +55,12 @@ class EventController extends Controller
         $this->events->delete($id);
         return redirect()->route('events.index');
     }
+
+
+    public function show($id)
+    {
+        $event = $this->events->getById($id);
+        return view('events.show', compact('event'));
+    }
+
 }
