@@ -2,58 +2,53 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
-use App\Models\Organizer;
-use App\Http\Requests\EventRequest;
+use App\Services\EventService;
+use App\Services\OrganizerService;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
+    protected $events;
+    protected $organizers;
+
+    public function __construct(EventService $events, OrganizerService $organizers)
+    {
+        $this->events = $events;
+        $this->organizers = $organizers;
+    }
+
     public function index(Request $request)
     {
-        $query = Event::with('organizer')->orderBy('date', 'asc');
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
-        }
-
-        $events = $query->paginate(10)->withQueryString();
+        $events = $this->events->getAll($request->search);
         return view('events.index', compact('events'));
     }
 
     public function create()
     {
-        $organizers = Organizer::orderBy('first_name')->get();
+        $organizers = $this->organizers->getAll();
         return view('events.create', compact('organizers'));
     }
 
-    public function store(EventRequest $request)
+    public function store(Request $request)
     {
-        Event::create($request->validated());
-        return redirect()->route('events.index')->with('success', 'Event created successfully.');
+        $this->events->store($request->all());
+        return redirect()->route('events.index');
     }
 
-    public function show(Event $event)
+    public function edit($id)
     {
-        $event->load('organizer');
-        return view('events.show', compact('event'));
+        $event = $this->events->events->find($id);
     }
 
-    public function edit(Event $event)
+    public function update(Request $request, $id)
     {
-        $organizers = Organizer::orderBy('first_name')->get();
-        return view('events.edit', compact('event', 'organizers'));
+        $this->events->update($id, $request->all());
+        return redirect()->route('events.index');
     }
 
-    public function update(EventRequest $request, Event $event)
+    public function destroy($id)
     {
-        $event->update($request->validated());
-        return redirect()->route('events.index')->with('success', 'Event updated.');
-    }
-
-    public function destroy(Event $event)
-    {
-        $event->delete();
-        return redirect()->route('events.index')->with('success', 'Event deleted.');
+        $this->events->delete($id);
+        return redirect()->route('events.index');
     }
 }

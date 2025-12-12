@@ -9,7 +9,6 @@ class OrganizerSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create 10 organizers
         Organizer::factory()->count(10)->create();
     }
 }

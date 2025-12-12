@@ -10,7 +10,6 @@ class OrganizerObserver
 {
     public function created(Organizer $organizer)
     {
-        // кратка нотификација за корисникот во сесија
         Session::flash('success', "Нов организатор е креиран: {$organizer->full_name}");
     }
 
