@@ -13,11 +13,12 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run()
+    public function run(): void
     {
-        \App\Models\Organizer::factory()->count(10)->create()->each(function($organizer){
-            \App\Models\Event::factory()->count(rand(1,5))->create(['organizer_id' => $organizer->id]);
-        });
+        $this->call([
+            OrganizerSeeder::class,
+            EventSeeder::class,
+        ]);
     }
 
 }

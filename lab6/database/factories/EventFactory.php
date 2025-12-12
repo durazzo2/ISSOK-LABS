@@ -3,27 +3,22 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Organizer; // <--- IMPORTANT
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Event>
- */
 class EventFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition()
+    public function definition(): array
     {
-        $types = ['seminar','workshop','lecture','panel'];
+        $types = ['seminar', 'workshop', 'lecture'];
+
         return [
-            'name' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraphs(3, true), // обично >20 chars
-            'type' => $this->faker->randomElement($types),
+            'name'         => $this->faker->sentence(3),
+            'description'  => $this->faker->paragraph(3),
+            'type'         => $this->faker->randomElement($types),
+            'date'         => $this->faker->dateTimeBetween('+1 day', '+1 year')->format('Y-m-d'),
+
+            // FIXED: correctly link organizer
             'organizer_id' => Organizer::factory(),
-            'date' => $this->faker->dateTimeBetween('+1 days', '+1 year')->format('Y-m-d'),
         ];
     }
-
 }
